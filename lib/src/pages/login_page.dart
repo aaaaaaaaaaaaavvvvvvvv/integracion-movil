@@ -1,4 +1,5 @@
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:push_local/src/providers/login_provider.dart';
 
@@ -7,10 +8,14 @@ class LoginPage extends StatelessWidget {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
   LoginProvider loginProvider = new LoginProvider();
-
-
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  var tokenLocal = '';
   @override
   Widget build(BuildContext context) {
+     _firebaseMessaging.requestNotificationPermissions();
+    _firebaseMessaging.getToken().then( (token) {
+      tokenLocal = token;
+    });
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -128,13 +133,16 @@ class LoginPage extends StatelessWidget {
   }
 
   _login(BuildContext context) async {
-
+   
     Map<String, dynamic> decodedResp =
         await loginProvider.login(emailController.text, passController.text);
-
+        print(decodedResp);
     if (decodedResp == null) {
       mostrarAlerta(context, 'Credenciales Incorrectas');
     } else {
+      Map<String, dynamic> decodeResult =
+        await loginProvider.actualizarCodigo(decodedResp["codigousuario"], tokenLocal);
+      print(decodeResult);
       Navigator.pushReplacementNamed(context, 'home');
     }
   }
