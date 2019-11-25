@@ -1,0 +1,4 @@
+class CarritoCompra{
+  int codigocompra;
+  
+}
