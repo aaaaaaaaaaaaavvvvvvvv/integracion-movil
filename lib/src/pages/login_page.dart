@@ -85,8 +85,8 @@ class LoginPage extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
                 icon: Icon(Icons.verified_user, color: Colors.deepPurple),
-                hintText: 'ejemplo@correo.com',
-                labelText: 'Correo electrónico',
+                hintText: 'example',
+                labelText: 'Usuario',
                 counterText: snapshot.data,
                 errorText: snapshot.error),
           ),
@@ -140,10 +140,9 @@ class LoginPage extends StatelessWidget {
     if (decodedResp == null) {
       mostrarAlerta(context, 'Credenciales Incorrectas');
     } else {
-      Map<String, dynamic> decodeResult =
-        await loginProvider.actualizarCodigo(decodedResp["codigousuario"], tokenLocal);
-      print(decodeResult);
+     
       Navigator.pushReplacementNamed(context, 'home');
+      loginProvider.actualizarCodigo(decodedResp["codigousuario"], tokenLocal);
     }
   }
 
